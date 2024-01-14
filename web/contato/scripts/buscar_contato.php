@@ -1,16 +1,31 @@
 <?php
-include(__DIR__ . '/../../inc/conecta.php');
-include_once(__DIR__ . '/../../util/StringUtil.php');
+include_once(__DIR__ . '/../../inc/conecta.php');
 
-// Verifica se o parâmetro 'id' está presente na URL
-if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $idContato = limparScapeString($_GET['id']);
-
-    // Recupera os dados do contato a ser editado
+function buscarContatoPorId($idContato)
+{
     $sqlEditar = "SELECT * FROM `contatos` WHERE id = $idContato";
-    $resultadoEditar = mysql_query($sqlEditar);
+    return resultadoBusca($sqlEditar);
+}
 
-    if (mysql_num_rows($resultadoEditar) == 1) {
-        $contato = mysql_fetch_assoc($resultadoEditar);
+function buscarIdContatoPorTelefone($telefone)
+{
+    $sql = "SELECT id FROM `contatos` WHERE telefone = '$telefone'";
+    return resultadoBusca($sql);
+}
+
+function buscarIdContatoPorEmail($email)
+{
+    $sql = "SELECT id FROM `contatos` where email ='$email'";
+    return resultadoBusca($sql);
+}
+
+function resultadoBusca($sql)
+{
+    $resultado = mysql_query($sql);
+    if ($resultado) {
+        if (mysql_num_rows($resultado) == 1) {
+            return mysql_fetch_assoc($resultado);
+        }
     }
+    return null;
 }

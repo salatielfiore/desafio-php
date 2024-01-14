@@ -36,6 +36,6 @@ $contagem = mysql_fetch_assoc($queryContagem);
 $total_resultados = $contagem['total'];
 
 function queryPequisaPorFiltro(){
-    $termo_pesquisa = limparScapeString($_GET['pesquisa']);
+    $termo_pesquisa = limparScapeString(trim($_GET['pesquisa']));
     return " WHERE `nome` LIKE '%$termo_pesquisa%' OR `telefone` LIKE '%$termo_pesquisa%' OR `email` LIKE '%$termo_pesquisa%'";
 }

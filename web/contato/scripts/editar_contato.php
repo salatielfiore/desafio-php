@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && is_numeric($
     $email = $_POST['email'];
 
     // Validação dos dados
-    processarFormularioContato($nome, $telefone, $email);
+    validarDadosContato($idContato, $nome, $telefone, $email);
 
     // Atualizar dados no banco de dados
     $sqlAtualizar = "UPDATE `contatos` SET nome='$nome', telefone='$telefone', email='$email' WHERE id=$idContato";

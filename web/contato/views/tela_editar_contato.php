@@ -1,5 +1,5 @@
 <?php
-include("../scripts/buscar_contato.php")
+include("../scripts/buscar_contato_atualizar.php")
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">

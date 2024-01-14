@@ -7,7 +7,7 @@ $(document).ready(function () {
         telefone = removerMascaraTelefone(telefone);
         if (validarDadosContato(nome, telefone, email)) {
             $.ajax({
-                url: '../../contato/scripts/inserir_contato.php',
+                url: '../../contato/scripts/adicionar_contato.php',
                 type: 'POST',
                 data: {
                     nome: nome,

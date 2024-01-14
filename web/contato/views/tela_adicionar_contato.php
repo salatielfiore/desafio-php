@@ -43,7 +43,7 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js"></script>
-<script src="../../js/salvarContato.js"></script>
+<script src="../../js/adicionarContato.js"></script>
 <script src="../../js/util/validateUtil.js"></script>
 <script src="../../js/util/stringUtils.js"></script>
 </body>

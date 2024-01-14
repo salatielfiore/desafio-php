@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'];
 
     // Validação dos dados
-    processarFormularioContato($nome, $telefone, $email);
+    validarDadosContato(null, $nome, $telefone, $email);
 
     // Inserir dados no banco de dados
     $sqlInserir = "INSERT INTO `contatos` (nome, telefone, email) VALUES ('$nome', '$telefone', '$email')";
