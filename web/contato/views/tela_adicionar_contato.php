@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../css/contato.css">
     <title>A.R. Phoenix - Adicionar Contato</title>
     <style>
         body {
@@ -20,7 +21,15 @@
 
     <div class="alert alert-danger mt-3" role="alert" hidden="hidden">
     </div>
-    <form action="" method="post" id="contatoForm">
+    <form action="" method="post" id="contatoForm" enctype="multipart/form-data">
+        <div class="form-group-img text-center">
+            <div class="avatar-container">
+                <input type="file" class="custom-file-input" id="fileInput" name="imagem"
+                       accept=".png, .jpg, .jpeg, .gif" onchange="previewImage(this);">
+                <img id="preview" src="../../img/avatar.png" alt="adicionar imagem"
+                     class="img-fluid rounded-circle tamanho-img">
+            </div>
+        </div>
         <div class="form-group">
             <label for="nome">Nome:</label>
             <input type="text" class="form-control" id="nome" name="nome" maxlength="50">
@@ -44,6 +53,7 @@
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js"></script>
 <script src="../../js/adicionarContato.js"></script>
+<script src="../../js/script.js"></script>
 <script src="../../js/util/validateUtil.js"></script>
 <script src="../../js/util/stringUtils.js"></script>
 </body>

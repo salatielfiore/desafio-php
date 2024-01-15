@@ -1,6 +1,6 @@
 <?php
 include_once(__DIR__ . '/../../util/validateUtil.php');
-include_once('validar_form_contato.php');
+include_once('validar_contato.php');
 include_once('buscar_contato.php');
 function validarDadosContato($id, $nome, $telefone, $email)
 {

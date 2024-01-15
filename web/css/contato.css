@@ -1,0 +1,27 @@
+.form-group-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar-container {
+    position: relative;
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+}
+
+.avatar-container input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.tamanho-img {
+    height: 100px;
+    width: 100px;
+}
