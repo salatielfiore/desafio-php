@@ -15,6 +15,8 @@ if ($_GET['submit'] === 'limpar') {
 $pesquisa = $_GET['pesquisa'];
 $dataInicio = $_GET['dataInicio'];
 $dataFim = $_GET['dataFim'];
+$ordem = isset($_GET['ordem']) ? $_GET['ordem'] : 'id';
+$direcao = isset($_GET['direcao']) ? $_GET['direcao'] : 'desc';
 
 // Calcula o offset (deslocamento) para a consulta SQL
 $offset = ($pagina_atual - 1) * $resultados_por_pagina;
@@ -32,10 +34,14 @@ if (!empty($pesquisa)) {
     $sql .= queryPequisaPorFiltroPesquisa($pesquisa);
 }
 
+$sql .= ordenacao($ordem, $direcao);
 // Adiciona a limitação de resultados por página
 $sql .= " LIMIT $offset, $resultados_por_pagina";
-
 $queryContatos = mysql_query($sql);
+
+if (!$queryContatos) {
+    die('Erro na consulta SQL: ' . mysql_error() . " " . $sql);
+}
 
 // Consulta para contar o número total de contatos
 $sqlContagem = "SELECT COUNT(*) AS total FROM `contatos` WHERE 1 = 1";
@@ -50,6 +56,7 @@ if (!empty($pesquisa)) {
     $sqlContagem .= queryPequisaPorFiltroPesquisa($pesquisa);
 }
 
+$sqlContagem .= ordenacao($ordem, $direcao);
 $queryContagem = mysql_query($sqlContagem);
 $contagem = mysql_fetch_assoc($queryContagem);
 $total_resultados = $contagem['total'];
@@ -70,4 +77,22 @@ function queryPequisaPorFiltroDataFim($dataFim)
 {
     $termoDataFim = formatarDataPadraoAmericano(limparScapeString(trim($dataFim)));
     return " AND data_criacao <= '$termoDataFim'";
+}
+
+function inverterDirecao($coluna)
+{
+    // Se a coluna atual é a mesma que a última ordenação, inverte a direção
+    if (isset($_GET['ordem']) && $_GET['ordem'] === $coluna) {
+        return ($_GET['direcao'] === 'asc') ? 'desc' : 'asc';
+    } else {
+        // Se for uma nova coluna, padrão para 'asc'
+        return 'asc';
+    }
+}
+
+function ordenacao($ordem, $direcao)
+{
+    $termoOrdem = limparScapeString(trim($ordem));
+    $termoDirecao = limparScapeString(trim($direcao));
+    return " ORDER BY $termoOrdem $termoDirecao";
 }

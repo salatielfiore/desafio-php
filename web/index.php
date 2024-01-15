@@ -20,6 +20,15 @@ include_once(__DIR__ . '/util/StringUtil.php');
         body {
             padding: 20px;
         }
+
+        .link-ordenacao {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .link-ordenacao:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -34,16 +43,20 @@ include_once(__DIR__ . '/util/StringUtil.php');
     <!-- Campo de pesquisa -->
     <form action="" method="GET">
         <div class="input-group mb-3">
+            <input type="hidden" id="ordem" name="ordem"
+                   value="<?php echo isset($_GET['ordem']) ? $_GET['ordem'] : 'id'; ?>">
+            <input type="hidden" id="direcao" name="direcao"
+                   value="<?php echo isset($_GET['direcao']) ? $_GET['direcao'] : 'desc'; ?>">
             <label>
                 <input hidden name="itensPorPagina" value="<?php echo $resultados_por_pagina; ?> ">
             </label>
             <!-- Campo de pesquisa -->
-            <input type="text" class="form-control" name="pesquisa" placeholder="Pesquisar contatos"
+            <input type="text" class="form-control mb-2" name="pesquisa" placeholder="Pesquisar contatos"
                    aria-label="Pesquisar contatos" aria-describedby="button-pesquisar"
-                   value="<?php echo isset($_GET['pesquisa']) ? $_GET['pesquisa'] : ''; ?>"><br><br>
+                   value="<?php echo isset($_GET['pesquisa']) ? $_GET['pesquisa'] : ''; ?>">
 
             <!-- Agrupamento dos campos de data -->
-            <div class="input-group">
+            <div class="input-group mb-2">
                 <!-- Campo de data inicial -->
                 <input type="text" class="form-control datepicker" name="dataInicio" placeholder="Data Inicial"
                        aria-label="Data Inicial" aria-describedby="basic-addon1"
@@ -54,11 +67,10 @@ include_once(__DIR__ . '/util/StringUtil.php');
                        aria-label="Data Final" aria-describedby="basic-addon2"
                        value="<?php echo isset($_GET['dataFim']) ? $_GET['dataFim'] : ''; ?>">
             </div>
-            <br><br>
             <div class="input-group-append">
                 <button class="btn btn-outline-primary" type="submit" id="button-pesquisar">Pesquisar</button>
             </div>
-            <div class="input-group-append" style="margin-left: 10px">
+            <div class="input-group-append ml-2">
                 <button class="btn btn-outline-danger" type="submit" name="submit" value="limpar">Limpar</button>
             </div>
         </div>
@@ -67,11 +79,39 @@ include_once(__DIR__ . '/util/StringUtil.php');
     <table class="table mt-4">
         <thead>
         <tr>
-            <th scope="col">Código</th>
-            <th scope="col">Nome</th>
-            <th scope="col">Telefone</th>
-            <th scope="col">Email</th>
-            <th scope="col">Data de Criação</th>
+            <th scope="col"><a class="link-ordenacao" href="
+            ?ordem=id&direcao=<?php echo inverterDirecao('id')
+                    . '&pesquisa=' . $_GET['pesquisa']
+                    . '&dataInicio=' . $_GET['dataInicio']
+                    . '&dataFim=' . $_GET['dataFim']
+                    . '&itensPorPagina=' . $resultados_por_pagina; ?>">Código</a></th>
+            <th scope="col"><a class="link-ordenacao" href="
+            ?ordem=nome&direcao=<?php echo inverterDirecao('nome')
+                    . '&pesquisa=' . $_GET['pesquisa']
+                    . '&dataInicio=' . $_GET['dataInicio']
+                    . '&dataFim=' . $_GET['dataFim']
+                    . '&itensPorPagina=' . $resultados_por_pagina; ?>">Nome</a>
+            </th>
+            <th scope="col"><a class="link-ordenacao" href="
+            ?ordem=telefone&direcao=<?php echo inverterDirecao('telefone')
+                    . '&pesquisa=' . $_GET['pesquisa']
+                    . '&dataInicio=' . $_GET['dataInicio']
+                    . '&dataFim=' . $_GET['dataFim']
+                    . '&itensPorPagina=' . $resultados_por_pagina; ?>">Telefone</a>
+            </th>
+            <th scope="col"><a class="link-ordenacao" href="
+            ?ordem=email&direcao=<?php echo inverterDirecao('email')
+                    . '&pesquisa=' . $_GET['pesquisa']
+                    . '&dataInicio=' . $_GET['dataInicio']
+                    . '&dataFim=' . $_GET['dataFim']
+                    . '&itensPorPagina=' . $resultados_por_pagina; ?>">Email</a></th>
+            <th scope="col"><a class="link-ordenacao" href="
+            ?ordem=data_criacao&direcao=<?php echo inverterDirecao('data_criacao')
+                    . '&pesquisa=' . $_GET['pesquisa']
+                    . '&dataInicio=' . $_GET['dataInicio']
+                    . '&dataFim=' . $_GET['dataFim']
+                    . '&itensPorPagina=' . $resultados_por_pagina; ?>">Data de
+                    Criação</a></th>
             <th scope="col">Ações</th>
         </tr>
         </thead>
@@ -156,7 +196,9 @@ include_once(__DIR__ . '/util/StringUtil.php');
                             echo "<li class='page-item'><a class='page-link' href='?pagina=" . ($pagina_atual - 1) .
                                 "&itensPorPagina=$resultados_por_pagina&pesquisa=" . urlencode($_GET['pesquisa']) .
                                 "&dataInicio=" . urlencode($_GET['dataInicio']) .
-                                "&dataFim=" . urlencode($_GET['dataFim']) . "'>&laquo;</a></li>";
+                                "&dataFim=" . urlencode($_GET['dataFim']) .
+                                "&ordem=" . urlencode($_GET['ordem']) .
+                                "&direcao=" . urlencode($_GET['direcao']) . "'>&laquo;</a></li>";
                         }
 
                         // Exibe os links de paginação
@@ -164,7 +206,9 @@ include_once(__DIR__ . '/util/StringUtil.php');
                             echo "<li class='page-item " . ($pagina_atual == $i ? 'active' : '') . "'><a class='page-link' 
                             href='?pagina=$i&itensPorPagina=$resultados_por_pagina&pesquisa=" . urlencode($_GET['pesquisa']) .
                                 "&dataInicio=" . urlencode($_GET['dataInicio']) .
-                                "&dataFim=" . urlencode($_GET['dataFim']) . "'>$i</a></li>";
+                                "&dataFim=" . urlencode($_GET['dataFim']) .
+                                "&ordem=" . urlencode($_GET['ordem']) .
+                                "&direcao=" . urlencode($_GET['direcao']) . "'>$i</a></li>";
                         }
 
                         // Adiciona seta para a direita
@@ -172,7 +216,9 @@ include_once(__DIR__ . '/util/StringUtil.php');
                             echo "<li class='page-item'><a class='page-link' href='?pagina=" . ($pagina_atual + 1) .
                                 "&itensPorPagina=$resultados_por_pagina&pesquisa=" . urlencode($_GET['pesquisa']) .
                                 "&dataInicio=" . urlencode($_GET['dataInicio']) .
-                                "&dataFim=" . urlencode($_GET['dataFim']) . "'>&raquo;</a></li>";
+                                "&dataFim=" . urlencode($_GET['dataFim']) .
+                                "&ordem=" . urlencode($_GET['ordem']) .
+                                "&direcao=" . urlencode($_GET['direcao']) . "'>&raquo;</a></li>";
                         }
                         ?>
                     </ul>
