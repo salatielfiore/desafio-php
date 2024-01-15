@@ -27,10 +27,10 @@ include("../scripts/buscar_contato_atualizar.php")
     <form method="post" id="editarContatoForm" enctype="multipart/form-data">
         <?php if (!empty($contato)) { ?>
             <div class="form-group-img text-center">
-                <div class="avatar-container" >
+                <div class="avatar-container">
                     <input type="file" class="custom-file-input" id="fileInputEditar" name="imagem"
                            accept=".png, .jpg, .jpeg, .gif" onchange="previewImage(this);">
-                    <img id="preview" src="<?php echo $urlLogo ?>" alt="adicionar imagem"
+                    <img id="preview" src="<?php echo $urlLogo . '?t=' . time(); ?>" alt="imagem"
                          class="img-fluid rounded-circle tamanho-img">
                 </div>
             </div>
