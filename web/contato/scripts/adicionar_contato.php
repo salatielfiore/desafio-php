@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $imagem = $_FILES['imagem'];
 
     // Inserir dados no banco de dados
-    $sqlInserir = "INSERT INTO `contatos` (nome, telefone, email) VALUES ('$nome', '$telefone', '$email')";
+    $sqlInserir = "INSERT INTO `contatos` (nome, telefone, email, data_criacao) VALUES ('$nome', '$telefone', '$email', CURDATE())";
     $resultado = mysql_query($sqlInserir);
 
     if ($resultado) {
