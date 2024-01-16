@@ -19,19 +19,19 @@ function validarDadosContato($id, $nome, $telefone, $email)
     }
 
     if (!isEmailValido($email)) {
-        $response = mensagemResponse(400, false, 'O email não é válido!');
+        $response = mensagemResponse(400, false, 'O email não é válido: ' . $email);
         echo json_encode($response);
         exit();
     }
 
     if (!validarTelefone($id, $telefone)) {
-        $response = mensagemResponse(400, false, 'Já existe esse telefone cadastrado.');
+        $response = mensagemResponse(400, false, 'Já existe esse telefone cadastrado: ' . $telefone);
         echo json_encode($response);
         exit();
     }
 
     if (!validarEmail($id, $email)) {
-        $response = mensagemResponse(400, false, 'Já existe esse email cadastrado.');
+        $response = mensagemResponse(400, false, 'Já existe esse email cadastrado: ' . $email);
         echo json_encode($response);
         exit();
     }

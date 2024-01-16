@@ -29,6 +29,12 @@ include_once(__DIR__ . '/util/StringUtil.php');
         .link-ordenacao:hover {
             text-decoration: underline;
         }
+        /* Ajuste do botão "X" para ficar no canto superior direito */
+        .modal-header .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
     </style>
 </head>
 
@@ -67,11 +73,20 @@ include_once(__DIR__ . '/util/StringUtil.php');
                        aria-label="Data Final" aria-describedby="basic-addon2"
                        value="<?php echo isset($_GET['dataFim']) ? $_GET['dataFim'] : ''; ?>">
             </div>
-            <div class="input-group-append">
-                <button class="btn btn-outline-primary" type="submit" id="button-pesquisar">Pesquisar</button>
-            </div>
-            <div class="input-group-append ml-2">
-                <button class="btn btn-outline-danger" type="submit" name="submit" value="limpar">Limpar</button>
+            <div class="input-group ml-auto"> <!-- Adicionado a classe "ml-auto" para empurrar para a direita -->
+                <div class="input-group-append">
+                    <button class="btn btn-outline-primary" type="submit" id="button-pesquisar">Pesquisar</button>
+                </div>
+                <div class="input-group-append ml-2">
+                    <button class="btn btn-outline-danger" type="submit" name="submit" value="limpar">Limpar</button>
+                </div>
+                <div class="input-group-append ml-auto">
+                    <label class="btn btn-outline-success" id="labelEnvioExcel" style="cursor: pointer">
+                        Importar
+                        <input type="file" name="arquivo_excel" style="display: none;" id="fileInputExcel"
+                               accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                    </label>
+                </div>
             </div>
         </div>
     </form>
@@ -197,8 +212,8 @@ include_once(__DIR__ . '/util/StringUtil.php');
                                 "&itensPorPagina=$resultados_por_pagina&pesquisa=" . urlencode($_GET['pesquisa']) .
                                 "&dataInicio=" . urlencode($_GET['dataInicio']) .
                                 "&dataFim=" . urlencode($_GET['dataFim']) .
-                                "&ordem=" . urlencode($_GET['ordem']) .
-                                "&direcao=" . urlencode($_GET['direcao']) . "'>&laquo;</a></li>";
+                                "&ordem=" . urlencode(!empty($_GET['ordem']) ? $_GET['ordem'] : "id") .
+                                "&direcao=" . urlencode(!empty($_GET['direcao']) ? $_GET['direcao'] : "desc") . "'>&laquo;</a></li>";
                         }
 
                         // Exibe os links de paginação
@@ -207,8 +222,8 @@ include_once(__DIR__ . '/util/StringUtil.php');
                             href='?pagina=$i&itensPorPagina=$resultados_por_pagina&pesquisa=" . urlencode($_GET['pesquisa']) .
                                 "&dataInicio=" . urlencode($_GET['dataInicio']) .
                                 "&dataFim=" . urlencode($_GET['dataFim']) .
-                                "&ordem=" . urlencode($_GET['ordem']) .
-                                "&direcao=" . urlencode($_GET['direcao']) . "'>$i</a></li>";
+                                "&ordem=" . urlencode(!empty($_GET['ordem']) ? $_GET['ordem'] : "id") .
+                                "&direcao=" . urlencode(!empty($_GET['direcao']) ? $_GET['direcao'] : "desc") . "'>$i</a></li>";
                         }
 
                         // Adiciona seta para a direita
@@ -217,8 +232,8 @@ include_once(__DIR__ . '/util/StringUtil.php');
                                 "&itensPorPagina=$resultados_por_pagina&pesquisa=" . urlencode($_GET['pesquisa']) .
                                 "&dataInicio=" . urlencode($_GET['dataInicio']) .
                                 "&dataFim=" . urlencode($_GET['dataFim']) .
-                                "&ordem=" . urlencode($_GET['ordem']) .
-                                "&direcao=" . urlencode($_GET['direcao']) . "'>&raquo;</a></li>";
+                                "&ordem=" . urlencode(!empty($_GET['ordem']) ? $_GET['ordem'] : "id") .
+                                "&direcao=" . urlencode(!empty($_GET['direcao']) ? $_GET['direcao'] : "desc") . "'>&raquo;</a></li>";
                         }
                         ?>
                     </ul>
@@ -226,6 +241,24 @@ include_once(__DIR__ . '/util/StringUtil.php');
             </div>
         </div>
     <?php } ?>
+    <div class="modal fade" id="modalAlerta" tabindex="-1" role="dialog" aria-labelledby="modalAlertaLabel">
+        <div class="modal-dialog modal-alerta" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="modalAlertaLabel">Alerta</h4>
+                </div>
+                <div class="modal-body">
+                    <p></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

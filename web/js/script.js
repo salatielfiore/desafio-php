@@ -1,17 +1,54 @@
 $(document).ready(function () {
-    // Adiciona setas de ordenação nas colunas apropriadas
-    $('th a').each(function () {
-        if ($(this).attr('href')) {
-            const direcao = $(this).attr('href').split('&direcao=')[1];
-            console.log(direcao)
-            if (direcao.includes('asc')) {
-                $(this).append(' &#9650;'); // Seta para cima
-            } else {
-                $(this).append(' &#9660;'); // Seta para baixo
-            }
-        }
-    });
+    $('#fileInputExcel').on('change', manipuladorDeArquivo);
+    $('th a').each(adicionarSetasOrdenacao);
 });
+
+function manipuladorDeArquivo() {
+    const arquivo = $(this)[0].files[0];
+
+    if (arquivo !== null) {
+        const formData = new FormData();
+        formData.append('arquivo_excel', arquivo);
+
+        $.ajax({
+            url: '../web/contato/scripts/salvar_contato_excel.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.status !== 200) {
+                    // Extraindo a mensagem do response
+                    console.log(response);
+                    const res = JSON.parse(response);
+                    const mensagem = res.message;
+
+                    // Atualizando o conteúdo do modal com a mensagem
+                    $('#modalAlerta .modal-body p').text(mensagem);
+
+                    // Abrindo o modal de alerta do Bootstrap
+                    $('#modalAlerta').modal('show');
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+}
+
+function adicionarSetasOrdenacao() {
+    if ($(this).attr('href')) {
+        const direcao = $(this).attr('href').split('&direcao=')[1];
+
+        if (direcao.includes('asc')) {
+            $(this).append(' &#9650;');
+        } else {
+            $(this).append(' &#9660;');
+        }
+    }
+}
+
 
 function atualizarPaginaComItensPorPagina() {
     const itensPorPagina = document.getElementById("itensPorPagina").value;

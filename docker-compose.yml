@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-   web:
+  web:
     image: prodamin/php-5.3-apache
     container_name: web
     ports:
@@ -12,18 +12,23 @@ services:
       sh -c "
         a2enmod headers
         a2enmod rewrite
-        docker-php-ext-install curl
+        cp /usr/src/php/ext/zlib/config0.m4 /usr/src/php/ext/zlib/config.m4
+        touch /usr/local/lib/php.ini
+        echo 'memory_limit = -1' >> /usr/local/lib/php.ini
+        echo 'date.timezone = America/Sao_Paulo' >> /usr/local/lib/php.ini
+        apt-get update && apt-get install -y apache2-utils libapache2-mod-php5 
+        docker-php-ext-install curl zip zlib mbstring
         apache2-foreground
-      "  
+      "
     depends_on:
       - database
-   database:
+  database:
     image: mysql:5.5
     container_name: database
     ports:
       - "3306:3306"
     environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: test
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root      
