@@ -1,7 +1,64 @@
 $(document).ready(function () {
     $('#fileInputExcel').on('change', manipuladorDeArquivo);
     $('th a').each(adicionarSetasOrdenacao);
+    $('button[type="submit"]').click(function () {
+        const botaoClicado = $(this).attr('name');
+        $('#filtroForm').data('botaoClicado', botaoClicado);
+    });
+
+    $('#filtroForm').submit(function (event) {
+        event.preventDefault();
+        filtroContatos();
+    });
 });
+
+
+function filtroContatos(event) {
+    const ordem = $('#ordem').val();
+    const direcao = $('#direcao').val();
+    const itensPorPagina = $('input[name="itensPorPagina"]').val();
+    const pesquisa = $('#pesquisa').val();
+    const dataInicio = $('#dataInicio').val();
+    const dataFim = $('#dataFim').val();
+
+    if (validacaoDados(pesquisa, dataInicio, dataFim)) {
+        const botaoClicado = $('#filtroForm').data('botaoClicado');
+        const formData = new FormData();
+        formData.append("ordem", ordem);
+        formData.append("direcao", direcao);
+        formData.append("itensPorPagina", itensPorPagina);
+        formData.append("pesquisa", pesquisa);
+        formData.append("dataInicio", dataInicio);
+        formData.append("dataFim", dataFim);
+        formData.append("botaoClicado", botaoClicado);
+
+        $.ajax({
+            url: '../web/contato/scripts/listar_contato.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                const res = JSON.parse(response);
+                if (res.status !== 200) {
+                    const mensagem = res.message;
+                    // Atualizando o conteúdo do modal com a mensagem
+                    $('#modalAlerta .modal-body p').text(mensagem);
+                    // Abrindo o modal de alerta do Bootstrap
+                    $('#modalAlerta').modal('show');
+                }
+            },
+            error: function (error) {
+                console.error(error);
+            }
+        });
+    }
+
+}
+
+function validacaoDados(pesquisa, dataInicio, dataFim) {
+    return !(pesquisa === '' && dataInicio === '' && dataFim === '');
+}
 
 function manipuladorDeArquivo() {
     const arquivo = $(this)[0].files[0];
@@ -17,15 +74,13 @@ function manipuladorDeArquivo() {
             processData: false,
             contentType: false,
             success: function (response) {
-                if (response.status !== 200) {
-                    // Extraindo a mensagem do response
-                    console.log(response);
-                    const res = JSON.parse(response);
+                const res = JSON.parse(response);
+                if (res.status === 200) {
+                    window.location.href = 'index.php';
+                } else {
                     const mensagem = res.message;
-
                     // Atualizando o conteúdo do modal com a mensagem
                     $('#modalAlerta .modal-body p').text(mensagem);
-
                     // Abrindo o modal de alerta do Bootstrap
                     $('#modalAlerta').modal('show');
                 }

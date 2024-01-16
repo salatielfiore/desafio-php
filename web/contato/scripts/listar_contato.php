@@ -3,20 +3,20 @@ include(__DIR__ . '/../../inc/conecta.php');
 include_once(__DIR__ . '/../../util/StringUtil.php');
 
 // Configurações de paginação
-$resultados_por_pagina = isset($_GET['itensPorPagina']) ? (int)$_GET['itensPorPagina'] : 10; // Valor padrão: 10
-$pagina_atual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+$resultados_por_pagina = isset($_POST['itensPorPagina']) ? (int)$_POST['itensPorPagina'] : 10; // Valor padrão: 10
+$pagina_atual = isset($_POST['pagina']) ? (int)$_POST['pagina'] : 1;
 
-if ($_GET['submit'] === 'limpar') {
-    $_GET['pesquisa'] = '';
-    $_GET['dataInicio'] = '';
-    $_GET['dataFim'] = '';
+if ($_POST['botaoClicado'] === 'limpar') {
+    $_POST['pesquisa'] = '';
+    $_POST['dataInicio'] = '';
+    $_POST['dataFim'] = '';
 }
 
-$pesquisa = $_GET['pesquisa'];
-$dataInicio = $_GET['dataInicio'];
-$dataFim = $_GET['dataFim'];
-$ordem = isset($_GET['ordem']) ? $_GET['ordem'] : 'id';
-$direcao = isset($_GET['direcao']) ? $_GET['direcao'] : 'desc';
+$pesquisa = $_POST['pesquisa'];
+$dataInicio = $_POST['dataInicio'];
+$dataFim = $_POST['dataFim'];
+$ordem = isset($_POST['ordem']) ? $_POST['ordem'] : 'id';
+$direcao = isset($_POST['direcao']) ? $_POST['direcao'] : 'desc';
 
 // Calcula o offset (deslocamento) para a consulta SQL
 $offset = ($pagina_atual - 1) * $resultados_por_pagina;
@@ -82,8 +82,8 @@ function queryPequisaPorFiltroDataFim($dataFim)
 function inverterDirecao($coluna)
 {
     // Se a coluna atual é a mesma que a última ordenação, inverte a direção
-    if (isset($_GET['ordem']) && $_GET['ordem'] === $coluna) {
-        return ($_GET['direcao'] === 'asc') ? 'desc' : 'asc';
+    if (isset($_POST['ordem']) && $_POST['ordem'] === $coluna) {
+        return ($_POST['direcao'] === 'asc') ? 'desc' : 'asc';
     } else {
         // Se for uma nova coluna, padrão para 'asc'
         return 'asc';

@@ -29,6 +29,7 @@ include_once(__DIR__ . '/util/StringUtil.php');
         .link-ordenacao:hover {
             text-decoration: underline;
         }
+
         /* Ajuste do botão "X" para ficar no canto superior direito */
         .modal-header .close {
             position: absolute;
@@ -47,35 +48,39 @@ include_once(__DIR__ . '/util/StringUtil.php');
     <a href="contato/views/tela_adicionar_contato.php" class="btn btn-primary mb-3">Novo Contato</a>
 
     <!-- Campo de pesquisa -->
-    <form action="" method="GET">
+    <form action="" method="POST" id="filtroForm">
         <div class="input-group mb-3">
             <input type="hidden" id="ordem" name="ordem"
-                   value="<?php echo isset($_GET['ordem']) ? $_GET['ordem'] : 'id'; ?>">
+                   value="<?php echo isset($_POST['ordem']) ? $_POST['ordem'] : 'id'; ?>">
             <input type="hidden" id="direcao" name="direcao"
-                   value="<?php echo isset($_GET['direcao']) ? $_GET['direcao'] : 'desc'; ?>">
+                   value="<?php echo isset($_POST['direcao']) ? $_POST['direcao'] : 'desc'; ?>">
             <label>
                 <input hidden name="itensPorPagina" value="<?php echo $resultados_por_pagina; ?> ">
             </label>
             <!-- Campo de pesquisa -->
-            <input type="text" class="form-control mb-2" name="pesquisa" placeholder="Pesquisar contatos"
+            <input type="text" class="form-control mb-2" name="pesquisa" id="pesquisa" placeholder="Pesquisar contatos"
                    aria-label="Pesquisar contatos" aria-describedby="button-pesquisar"
-                   value="<?php echo isset($_GET['pesquisa']) ? $_GET['pesquisa'] : ''; ?>">
+                   value="<?php echo isset($_POST['pesquisa']) ? $_POST['pesquisa'] : ''; ?>">
 
             <!-- Agrupamento dos campos de data -->
             <div class="input-group mb-2">
                 <!-- Campo de data inicial -->
-                <input type="text" class="form-control datepicker" name="dataInicio" placeholder="Data Inicial"
+                <input type="text" class="form-control datepicker" name="dataInicio" id="dataInicio"
+                       placeholder="Data Inicial"
                        aria-label="Data Inicial" aria-describedby="basic-addon1"
-                       value="<?php echo isset($_GET['dataInicio']) ? $_GET['dataInicio'] : ''; ?>">
+                       value="<?php echo isset($_POST['dataInicio']) ? $_POST['dataInicio'] : ''; ?>">
 
                 <!-- Campo de data final -->
-                <input type="text" class="form-control datepicker ml-2" name="dataFim" placeholder="Data Final"
+                <input type="text" class="form-control datepicker ml-2" name="dataFim" id="dataFim"
+                       placeholder="Data Final"
                        aria-label="Data Final" aria-describedby="basic-addon2"
-                       value="<?php echo isset($_GET['dataFim']) ? $_GET['dataFim'] : ''; ?>">
+                       value="<?php echo isset($_POST['dataFim']) ? $_POST['dataFim'] : ''; ?>">
             </div>
             <div class="input-group ml-auto"> <!-- Adicionado a classe "ml-auto" para empurrar para a direita -->
                 <div class="input-group-append">
-                    <button class="btn btn-outline-primary" type="submit" id="button-pesquisar">Pesquisar</button>
+                    <button class="btn btn-outline-primary" type="submit" id="button-pesquisar" value="pesquisar">
+                        Pesquisar
+                    </button>
                 </div>
                 <div class="input-group-append ml-2">
                     <button class="btn btn-outline-danger" type="submit" name="submit" value="limpar">Limpar</button>
@@ -245,7 +250,8 @@ include_once(__DIR__ . '/util/StringUtil.php');
         <div class="modal-dialog modal-alerta" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" onclick="(() => { window.location.href = 'index.php'; })()" class="close"
+                            data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 class="modal-title" id="modalAlertaLabel">Alerta</h4>
@@ -254,7 +260,9 @@ include_once(__DIR__ . '/util/StringUtil.php');
                     <p></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                    <button type="button" onclick="(() => { window.location.href = 'index.php'; })()"
+                            class="btn btn-default" data-dismiss="modal">Fechar
+                    </button>
                 </div>
             </div>
         </div>
