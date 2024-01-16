@@ -1,9 +1,5 @@
 <?php
-/**
- * @param $imagem
- * @param $idContato
- * @return string
- */
+
 function salvarImagem($imagem, $idContato)
 {
     $imagemNome = $imagem['name'];

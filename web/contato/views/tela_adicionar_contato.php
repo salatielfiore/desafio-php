@@ -26,7 +26,7 @@
             <div class="avatar-container">
                 <input type="file" class="custom-file-input" id="fileInput" name="imagem"
                        accept=".png, .jpg, .jpeg, .gif" onchange="previewImage(this);">
-                <img id="preview" src="../../img/avatar.png" alt="adicionar imagem"
+                <img id="preview" src="../img/avatar.png" alt="adicionar imagem"
                      class="img-fluid rounded-circle tamanho-img">
             </div>
         </div>

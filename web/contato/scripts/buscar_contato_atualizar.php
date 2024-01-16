@@ -8,5 +8,5 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $idContato = limparScapeString($_GET['id']);
     $contato = buscarContatoPorId($idContato);
     $logo = $contato['logo'];
-    $urlLogo = !empty($logo) ? '../img/' . $logo : '../../img/avatar.png';
+    $urlLogo = !empty($logo) ? '../img/' . $logo : '../img/avatar.png';
 }
