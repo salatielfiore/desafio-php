@@ -53,6 +53,7 @@
     <form action="" method="POST" id="filtroForm">
         <input type="hidden" id="ordem" name="ordem" value="id">
         <input type="hidden" id="direcao" name="direcao" value="asc">
+        <input type="hidden" id="paginaAtual" name="paginaAtual" value="1">
         <input type="hidden" name="itensPorPagina" value="5">
         <div class="input-group mb-3">
             <!-- Campo de pesquisa -->
@@ -126,6 +127,13 @@
                 <option value="50">50</option>
                 <option value="100">100</option>
             </select>
+        </div>
+        <div>
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-end" id="pagination-container">
+
+                </ul>
+            </nav>
         </div>
     </div>
     <!-- Modal de Confirmação de Exclusão -->

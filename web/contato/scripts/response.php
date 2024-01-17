@@ -8,13 +8,14 @@ function mensagemResponse($status, $success, $mensagem)
     );
 }
 
-function mensagemResponseData($status, $success, $mensagem, $data, $totalResultado)
+function mensagemResponseData($status, $success, $mensagem, $data, $totalResultado, $paginaAtual)
 {
     return array(
         "status" => $status,
         "success" => $success,
         "message" => $mensagem,
         "data" => $data,
-        "totalResultado" => $totalResultado
+        "totalResultado" => $totalResultado,
+        "paginaAtual" => $paginaAtual
     );
 }

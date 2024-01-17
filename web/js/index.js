@@ -17,10 +17,19 @@ $(document).ready(function () {
 
     $('#filtroForm').submit(function (event) {
         event.preventDefault();
-        filtroContatos(true);
+        filtrarContatos();
     });
 
-    filtroContatos(false);
+    // Adicione um evento de clique para os botões de paginação
+    $('#pagination-container').on('click', 'a', function (event) {
+        event.preventDefault();
+        const newPage = $(this).data('page');
+        $('#paginaAtual').val(newPage);
+        // Atualize a página com o novo número
+        listarContatos(false);
+    });
+
+    listarContatos(false);
 });
 
 function modalAlertaExcluir(event) {
@@ -34,15 +43,20 @@ function modalAlertaExcluir(event) {
 
 function excluirContato() {
     const contatoId = $(this).data('contato-id');
-    console.log(contatoId);
     // $('#modalAlertaExcluir').modal('hide');
 }
 
+function filtrarContatos() {
+    $('#paginaAtual').val("1");
+    listarContatos(true);
+}
 
-function filtroContatos(isvalidarCampo) {
+
+function listarContatos(isvalidarCampo) {
     let ordem = $('#ordem').val();
     let direcao = $('#direcao').val();
     let itensPorPagina = $('input[name="itensPorPagina"]').val();
+    const paginaAtual = $('#paginaAtual').val();
     let pesquisa = $('#pesquisa').val();
     let dataInicio = $('#dataInicio').val();
     let dataFim = $('#dataFim').val();
@@ -64,6 +78,7 @@ function filtroContatos(isvalidarCampo) {
         formData.append("pesquisa", pesquisa);
         formData.append("dataInicio", dataInicio);
         formData.append("dataFim", dataFim);
+        formData.append("pagina", paginaAtual);
         $.ajax({
             url: '../web/contato/scripts/listar_contato_filtro.php',
             type: 'POST',
@@ -75,7 +90,9 @@ function filtroContatos(isvalidarCampo) {
                 if (res.status === 200) {
                     const contatos = res.data;
                     const totalResultado = res.totalResultado;
+                    const paginaAtual = res.paginaAtual;
                     atualizarTabela(contatos);
+                    atualizarPaginacao(totalResultado, paginaAtual);
                 } else {
                     const mensagem = res.message;
                     // Atualizando o conteúdo do modal com a mensagem
@@ -175,12 +192,40 @@ function adicionarSetasOrdenacao(event) {
     $(this).removeClass('seta-desc seta-asc').addClass(novaDirecao === 'desc' ? 'seta-desc' : 'seta-asc');
 
     // Executar a função de filtro
-    filtroContatos(false);
+    listarContatos(false);
 }
 
 
 function atualizarPaginaComItensPorPagina() {
     const itensPorPagina = $('#itensPorPaginaSelect').val();
     $('input[name="itensPorPagina"]').val(itensPorPagina);
-    filtroContatos(false);
+    listarContatos(false);
+}
+
+function atualizarPaginacao(totalResultado, paginaAtual) {
+    const resultadosPorPagina = $('input[name="itensPorPagina"]').val();
+    const totalPaginas = Math.ceil(totalResultado / resultadosPorPagina);
+
+    // Lógica para criar os botões da paginação
+    const numLinks = 5;
+    const meio = Math.ceil(numLinks / 2);
+    const inicio = Math.max(1, Math.min(paginaAtual - meio, totalPaginas - numLinks + 1));
+
+    const paginationContainer = $('#pagination-container');
+    paginationContainer.empty(); // Limpa a paginação atual
+
+    // Adiciona seta para a esquerda
+    if (paginaAtual > 1) {
+        paginationContainer.append(`<li class='page-item'><a class='page-link' style="cursor: pointer" data-page='${paginaAtual - 1}'>&laquo;</a></li>`);
+    }
+
+    // Exibe os links de paginação
+    for (let i = inicio; i < inicio + numLinks && i <= totalPaginas; i++) {
+        paginationContainer.append(`<li class='page-item ${paginaAtual === i ? 'active' : ''}'><a class='page-link' style="cursor: pointer" data-page='${i}'>${i}</a></li>`);
+    }
+
+    // Adiciona seta para a direita
+    if (paginaAtual < totalPaginas) {
+        paginationContainer.append(`<li class='page-item'><a class='page-link' style="cursor: pointer" data-page='${paginaAtual + 1}'>&raquo;</a></li>`);
+    }
 }

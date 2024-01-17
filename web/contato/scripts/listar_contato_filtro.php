@@ -62,7 +62,7 @@ $contagem = mysql_fetch_assoc($queryContagem);
 $total_resultados = $contagem['total'];
 
 // Crie a resposta em formato JSON
-$response = mensagemResponseData(200, true, null, $contatos, $total_resultados);
+$response = mensagemResponseData(200, true, null, $contatos, $total_resultados, $pagina_atual);
 echo json_encode($response);
 exit();
 
