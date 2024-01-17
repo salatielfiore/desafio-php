@@ -8,37 +8,8 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="css/index.css">
     <title>A.R. Phoenix</title>
-    <style>
-        body {
-            padding: 20px;
-        }
-
-        .link-ordenacao {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        .link-ordenacao:hover {
-            text-decoration: underline;
-        }
-
-        /* Ajuste do botão "X" para ficar no canto superior direito */
-        .modal-header .close {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-        }
-
-        .seta-desc::after {
-            content: ' ▼';
-        }
-
-        .seta-asc::after {
-            content: ' ▲';
-        }
-
-    </style>
 </head>
 
 <body>
@@ -157,25 +128,14 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modalAlerta" tabindex="-1" role="dialog" aria-labelledby="modalAlertaLabel">
-        <div class="modal-dialog modal-alerta" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" onclick="(() => { window.location.href = 'index.php'; })()" class="close"
-                            data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title" id="modalAlertaLabel">Alerta</h4>
-                </div>
-                <div class="modal-body">
-                    <p></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" onclick="(() => { window.location.href = 'index.php'; })()"
-                            class="btn btn-default" data-dismiss="modal">Fechar
-                    </button>
-                </div>
-            </div>
+    <div class="toast" id="customToast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000" style="position: absolute; top: 0; right: 0;">
+        <div class="toast-header">
+            <strong class="mr-auto">Mensagem</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Fechar">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body">
         </div>
     </div>
 </div>

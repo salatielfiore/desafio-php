@@ -38,12 +38,33 @@ function modalAlertaExcluir(event) {
     // Adicione o contatoId ao botão de confirmação como atributo de dados
     $('#btnConfirmarExclusao').data('contato-id', contatoId);
     const modal = $(this);
-    modal.find('.modal-body p').text(`Tem certeza que deseja excluir o contato com ID ${contatoId}?`);
+    modal.find('.modal-body p').text(`Tem certeza que deseja excluir esse contato?`);
 }
 
 function excluirContato() {
     const contatoId = $(this).data('contato-id');
-    // $('#modalAlertaExcluir').modal('hide');
+    const formData = new FormData();
+    formData.append("id", contatoId);
+    $.ajax({
+        url: '../web/contato/scripts/excluir_contato.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            const res = JSON.parse(response);
+            if (res.status === 200) {
+                exibirToast(res.message, "success")
+                listarContatos(false);
+            } else {
+                exibirToast(res.message, "danger")
+            }
+        },
+        error: function (error) {
+            console.error(error);
+        }
+    });
+    $('#modalAlertaExcluir').modal('hide');
 }
 
 function filtrarContatos() {
@@ -90,9 +111,17 @@ function listarContatos(isvalidarCampo) {
                 if (res.status === 200) {
                     const contatos = res.data;
                     const totalResultado = res.totalResultado;
-                    const paginaAtual = res.paginaAtual;
-                    atualizarTabela(contatos);
-                    atualizarPaginacao(totalResultado, paginaAtual);
+                    let paginaAtual = res.paginaAtual;
+
+                    const resultadosPorPagina = $('input[name="itensPorPagina"]').val();
+                    const totalPaginas = Math.ceil(totalResultado / resultadosPorPagina);
+                    if (totalPaginas !== 0 && paginaAtual > totalPaginas) {
+                        paginaAtual = paginaAtual - 1;
+                        $("#paginaAtual").val(paginaAtual);
+                        listarContatos(false);
+                    }
+                    atualizarTabela(contatos)
+                    atualizarPaginacao(totalResultado, paginaAtual, totalPaginas);
                 } else {
                     const mensagem = res.message;
                     // Atualizando o conteúdo do modal com a mensagem
@@ -155,11 +184,7 @@ function manipuladorDeArquivo() {
                 if (res.status === 200) {
                     window.location.href = 'index.php';
                 } else {
-                    const mensagem = res.message;
-                    // Atualizando o conteúdo do modal com a mensagem
-                    $('#modalAlerta .modal-body p').text(mensagem);
-                    // Abrindo o modal de alerta do Bootstrap
-                    $('#modalAlerta').modal('show');
+                    console.error(res.message);
                 }
             },
             error: function (error) {
@@ -199,12 +224,11 @@ function adicionarSetasOrdenacao(event) {
 function atualizarPaginaComItensPorPagina() {
     const itensPorPagina = $('#itensPorPaginaSelect').val();
     $('input[name="itensPorPagina"]').val(itensPorPagina);
+    $('#paginaAtual').val("1");
     listarContatos(false);
 }
 
-function atualizarPaginacao(totalResultado, paginaAtual) {
-    const resultadosPorPagina = $('input[name="itensPorPagina"]').val();
-    const totalPaginas = Math.ceil(totalResultado / resultadosPorPagina);
+function atualizarPaginacao(totalResultado, paginaAtual, totalPaginas) {
 
     // Lógica para criar os botões da paginação
     const numLinks = 5;
@@ -228,4 +252,14 @@ function atualizarPaginacao(totalResultado, paginaAtual) {
     if (paginaAtual < totalPaginas) {
         paginationContainer.append(`<li class='page-item'><a class='page-link' style="cursor: pointer" data-page='${paginaAtual + 1}'>&raquo;</a></li>`);
     }
+}
+
+function exibirToast(mensagem, tipo) {
+    // 'tipo' pode ser 'success', 'danger', 'warning', etc.
+    // Modificar o conteúdo do toast
+    $('#customToast .toast-body').text(mensagem);
+    // Modificar a classe de cor do toast de acordo com o tipo
+    $('#customToast').removeClass().addClass(`toast bg-${tipo}`);
+    // Exibir o toast
+    $('#customToast').toast('show');
 }
