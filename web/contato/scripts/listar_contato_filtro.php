@@ -4,20 +4,14 @@ include_once(__DIR__ . '/../../util/StringUtil.php');
 include_once('response.php');
 
 // Configurações de paginação
-$resultados_por_pagina = isset($_POST['itensPorPagina']) ? (int)$_POST['itensPorPagina'] : 10; // Valor padrão: 10
+$resultados_por_pagina = isset($_POST['itensPorPagina']) ? (int)$_POST['itensPorPagina'] : 5;
 $pagina_atual = isset($_POST['pagina']) ? (int)$_POST['pagina'] : 1;
-
-if ($_POST['botaoClicado'] === 'limpar') {
-    $_POST['pesquisa'] = '';
-    $_POST['dataInicio'] = '';
-    $_POST['dataFim'] = '';
-}
 
 $pesquisa = $_POST['pesquisa'];
 $dataInicio = $_POST['dataInicio'];
 $dataFim = $_POST['dataFim'];
 $ordem = isset($_POST['ordem']) ? $_POST['ordem'] : 'id';
-$direcao = isset($_POST['direcao']) ? $_POST['direcao'] : 'desc';
+$direcao = isset($_POST['direcao']) ? $_POST['direcao'] : 'asc';
 
 // Calcula o offset (deslocamento) para a consulta SQL
 $offset = ($pagina_atual - 1) * $resultados_por_pagina;
@@ -68,7 +62,7 @@ $contagem = mysql_fetch_assoc($queryContagem);
 $total_resultados = $contagem['total'];
 
 // Crie a resposta em formato JSON
-$response = mensagemResponseData(200, true, $sql, $contatos, $total_resultados);
+$response = mensagemResponseData(200, true, null, $contatos, $total_resultados);
 echo json_encode($response);
 exit();
 

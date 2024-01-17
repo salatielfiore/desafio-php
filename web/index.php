@@ -53,6 +53,7 @@
     <form action="" method="POST" id="filtroForm">
         <input type="hidden" id="ordem" name="ordem" value="id">
         <input type="hidden" id="direcao" name="direcao" value="asc">
+        <input type="hidden" name="itensPorPagina" value="5">
         <div class="input-group mb-3">
             <!-- Campo de pesquisa -->
             <input type="text" class="form-control mb-2" name="pesquisa" id="pesquisa" placeholder="Pesquisar contatos"
@@ -113,6 +114,20 @@
         <tbody>
         </tbody>
     </table>
+    <div class="pagination mt-4">
+        <div class="ml-3">
+            <label for="itensPorPaginaSelect"></label><select class="custom-select" id="itensPorPaginaSelect"
+                                                        name="itensPorPaginaSelect">
+                <option value="5" selected>5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+    </div>
     <!-- Modal de Confirmação de Exclusão -->
     <div class="modal fade" id="modalAlertaExcluir" tabindex="-1" role="dialog"
          aria-labelledby="modalAlertaExcluirLabel">

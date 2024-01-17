@@ -1,10 +1,14 @@
 $(document).ready(function () {
     $('#fileInputExcel').on('change', manipuladorDeArquivo);
+
     $('th a').on('click', adicionarSetasOrdenacao);
+
     $('button[type="submit"]').click(function () {
         const botaoClicado = $(this).attr('name');
         $('#filtroForm').data('botaoClicado', botaoClicado);
     });
+
+    $('#itensPorPaginaSelect').change(atualizarPaginaComItensPorPagina);
 
     $('#modalAlertaExcluir').on('show.bs.modal', modalAlertaExcluir);
 
@@ -39,7 +43,6 @@ function filtroContatos(isvalidarCampo) {
     let ordem = $('#ordem').val();
     let direcao = $('#direcao').val();
     let itensPorPagina = $('input[name="itensPorPagina"]').val();
-    itensPorPagina = itensPorPagina != null ? itensPorPagina : 10;
     let pesquisa = $('#pesquisa').val();
     let dataInicio = $('#dataInicio').val();
     let dataFim = $('#dataFim').val();
@@ -165,7 +168,7 @@ function adicionarSetasOrdenacao(event) {
     $('#ordem').val(novaOrdem);
     $('#direcao').val(novaDirecao);
 
-    // Remover a classe 'seta-desc' e 'seta-asc' de todas as tags 'a'
+    // Remover a classe 'seta-desc' e adicionar a classe 'seta-asc' para todas as tags 'a'
     $('th a').removeClass('seta-desc').addClass('seta-asc');
 
     // Adicionar a classe apropriada à tag 'a' clicada
@@ -177,32 +180,7 @@ function adicionarSetasOrdenacao(event) {
 
 
 function atualizarPaginaComItensPorPagina() {
-    const itensPorPagina = document.getElementById("itensPorPagina").value;
-    const termoPesquisaElement = document.querySelector("input[name='pesquisa']");
-    const dataInicioElement = document.querySelector("input[name='dataInicio']");
-    const dataFimElement = document.querySelector("input[name='dataFim']");
-    const termoPesquisa = termoPesquisaElement ? termoPesquisaElement.value.trim() : '';
-    const dataInicio = termoPesquisaElement ? dataInicioElement.value.trim() : '';
-    const dataFim = termoPesquisaElement ? dataFimElement.value.trim() : '';
-    const ordem = document.getElementById("ordem").value;
-    const direcao = document.getElementById("direcao").value;
-
-    let href = `?pagina=1&itensPorPagina=${itensPorPagina}`;
-
-    if (termoPesquisa !== '') {
-        href += `&pesquisa=${termoPesquisa}`;
-    }
-    if (dataInicio !== '') {
-        href += `&dataInicio=${dataInicio}`;
-    }
-    if (dataFim !== '') {
-        href += `&dataFim=${dataFim}`;
-    }
-    if (ordem !== '') {
-        href += `&ordem=${ordem}&direcao=${direcao}`;
-    } else {
-        href += "&ordem=id&direcao=desc";
-    }
-
-    window.location.href = href;
+    const itensPorPagina = $('#itensPorPaginaSelect').val();
+    $('input[name="itensPorPagina"]').val(itensPorPagina);
+    filtroContatos(false);
 }
