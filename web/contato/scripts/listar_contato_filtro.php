@@ -90,17 +90,6 @@ function queryPequisaPorFiltroDataFim($dataFim)
     return " AND data_criacao <= '$termoDataFim'";
 }
 
-function inverterDirecao($coluna)
-{
-    // Se a coluna atual é a mesma que a última ordenação, inverte a direção
-    if (isset($_POST['ordem']) && $_POST['ordem'] === $coluna) {
-        return ($_POST['direcao'] === 'asc') ? 'desc' : 'asc';
-    } else {
-        // Se for uma nova coluna, padrão para 'asc'
-        return 'asc';
-    }
-}
-
 function ordenacao($ordem, $direcao)
 {
     $termoOrdem = limparScapeString(trim($ordem));

@@ -29,6 +29,15 @@
             top: 10px;
             right: 20px;
         }
+
+        .seta-desc::after {
+            content: ' ▼';
+        }
+
+        .seta-asc::after {
+            content: ' ▲';
+        }
+
     </style>
 </head>
 
@@ -42,6 +51,8 @@
 
     <!-- Campo de pesquisa -->
     <form action="" method="POST" id="filtroForm">
+        <input type="hidden" id="ordem" name="ordem" value="id">
+        <input type="hidden" id="direcao" name="direcao" value="asc">
         <div class="input-group mb-3">
             <!-- Campo de pesquisa -->
             <input type="text" class="form-control mb-2" name="pesquisa" id="pesquisa" placeholder="Pesquisar contatos"
@@ -83,11 +94,19 @@
     <table class="table mt-4">
         <thead>
         <tr>
-            <th scope="col">Código</th>
-            <th scope="col">Nome</th>
-            <th scope="col">Telefone</th>
-            <th scope="col">Email</th>
-            <th scope="col">Data de Criação</th>
+            <th class="seta" scope="col"><a class="link-ordenacao seta-asc" data-ordem="id" style="cursor: pointer">Código</a>
+            </th>
+            <th class="seta" scope="col"><a class="link-ordenacao seta-asc" data-ordem="nome" style="cursor: pointer">Nome</a>
+            </th>
+            <th class="seta" scope="col"><a class="link-ordenacao seta-asc" data-ordem="telefone"
+                                            style="cursor: pointer">Telefone</a>
+            </th>
+            <th class="seta" scope="col"><a class="link-ordenacao seta-asc" data-ordem="email" style="cursor: pointer">Email</a>
+            </th>
+            <th class="seta" scope="col"><a class="link-ordenacao seta-asc" data-ordem="data_criacao"
+                                            style="cursor: pointer">Data
+                    de
+                    Criação</a></th>
             <th scope="col">Ações</th>
         </tr>
         </thead>

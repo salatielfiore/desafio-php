@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $('#fileInputExcel').on('change', manipuladorDeArquivo);
-    $('th a').each(adicionarSetasOrdenacao);
+    $('th a').on('click', adicionarSetasOrdenacao);
     $('button[type="submit"]').click(function () {
         const botaoClicado = $(this).attr('name');
         $('#filtroForm').data('botaoClicado', botaoClicado);
@@ -13,10 +13,10 @@ $(document).ready(function () {
 
     $('#filtroForm').submit(function (event) {
         event.preventDefault();
-        filtroContatos(false);
+        filtroContatos(true);
     });
 
-    filtroContatos(true);
+    filtroContatos(false);
 });
 
 function modalAlertaExcluir(event) {
@@ -37,15 +37,12 @@ function excluirContato() {
 
 function filtroContatos(isvalidarCampo) {
     let ordem = $('#ordem').val();
-    ordem = ordem != null ? ordem : "id";
     let direcao = $('#direcao').val();
-    direcao = direcao != null ? direcao : "desc";
     let itensPorPagina = $('input[name="itensPorPagina"]').val();
     itensPorPagina = itensPorPagina != null ? itensPorPagina : 10;
     let pesquisa = $('#pesquisa').val();
     let dataInicio = $('#dataInicio').val();
     let dataFim = $('#dataFim').val();
-
     if (validacaoDados(pesquisa, dataInicio, dataFim, isvalidarCampo)) {
         const botaoClicado = $('#filtroForm').data('botaoClicado');
         if (botaoClicado === "limpar") {
@@ -64,7 +61,6 @@ function filtroContatos(isvalidarCampo) {
         formData.append("pesquisa", pesquisa);
         formData.append("dataInicio", dataInicio);
         formData.append("dataFim", dataFim);
-
         $.ajax({
             url: '../web/contato/scripts/listar_contato_filtro.php',
             type: 'POST',
@@ -90,11 +86,10 @@ function filtroContatos(isvalidarCampo) {
             }
         });
     }
-
 }
 
 function validacaoDados(pesquisa, dataInicio, dataFim, isvalidarCampo) {
-    if (isvalidarCampo) {
+    if (!isvalidarCampo) {
         return true;
     }
     return !(pesquisa === '' && dataInicio === '' && dataFim === '');
@@ -154,16 +149,30 @@ function manipuladorDeArquivo() {
     }
 }
 
-function adicionarSetasOrdenacao() {
-    if ($(this).attr('href')) {
-        const direcao = $(this).attr('href').split('&direcao=')[1];
+function adicionarSetasOrdenacao(event) {
+    event.preventDefault();
 
-        if (direcao.includes('asc')) {
-            $(this).append(' &#9650;');
-        } else {
-            $(this).append(' &#9660;');
-        }
+    // Alterar os valores dos inputs de ordem e direção
+    const ordemAtual = $('#ordem').val();
+    const novaOrdem = $(this).data('ordem');
+    let novaDirecao;
+    if (ordemAtual !== novaOrdem) {
+        novaDirecao = 'desc'
+    } else {
+        novaDirecao = (ordemAtual === novaOrdem && $('#direcao').val() === 'asc') ? 'desc' : 'asc';
     }
+
+    $('#ordem').val(novaOrdem);
+    $('#direcao').val(novaDirecao);
+
+    // Remover a classe 'seta-desc' e 'seta-asc' de todas as tags 'a'
+    $('th a').removeClass('seta-desc').addClass('seta-asc');
+
+    // Adicionar a classe apropriada à tag 'a' clicada
+    $(this).removeClass('seta-desc seta-asc').addClass(novaDirecao === 'desc' ? 'seta-desc' : 'seta-asc');
+
+    // Executar a função de filtro
+    filtroContatos(false);
 }
 
 
