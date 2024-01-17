@@ -78,7 +78,7 @@ function listarContatos(isvalidarCampo) {
     let direcao = $('#direcao').val();
     let itensPorPagina = $('input[name="itensPorPagina"]').val();
     const paginaAtual = $('#paginaAtual').val();
-    let pesquisa = $('#pesquisa').val();
+    let pesquisa = removerMascaraTelefone($('#pesquisa').val());
     let dataInicio = $('#dataInicio').val();
     let dataFim = $('#dataFim').val();
     if (validacaoDados(pesquisa, dataInicio, dataFim, isvalidarCampo)) {
@@ -177,6 +177,9 @@ function adicionarMascaraTelefone(telefone) {
     return telefone
 }
 
+function removerMascaraTelefone(telefone) {
+    return telefone.replace(/\D/g, '');
+}
 
 function manipuladorDeArquivo() {
     const arquivo = $(this)[0].files[0];
