@@ -10,8 +10,10 @@
     <orderEntry type="library" name="jquery.inputmask" level="application" />
     <orderEntry type="library" name="bootstrap" level="application" />
     <orderEntry type="library" name="bootstrap-datepicker" level="application" />
+    <orderEntry type="library" name="moment.js" level="application" />
+    <orderEntry type="library" name="bootstrap-datepicker" level="application" />
+    <orderEntry type="library" name="jquery.inputmask" level="application" />
     <orderEntry type="library" name="bootstrap" level="application" />
     <orderEntry type="library" name="jquery-3.6.0" level="application" />
-    <orderEntry type="library" name="jquery.inputmask" level="application" />
   </component>
 </module>

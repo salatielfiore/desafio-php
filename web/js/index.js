@@ -151,10 +151,10 @@ function atualizarTabela(contatos) {
     contatos.forEach(function (contato) {
         const linha = $('<tr>');
         linha.append($('<td>').text(contato.id));
-        linha.append($('<td>').text(contato.nome));
-        linha.append($('<td>').text(contato.telefone));
+        linha.append($('<td >').text(contato.nome));
+        linha.append($('<td >').text(adicionarMascaraTelefone(contato.telefone)));
         linha.append($('<td>').text(contato.email));
-        linha.append($('<td>').text(contato.data_criacao));
+        linha.append($('<td>').text(formatarData(contato.data_criacao)));
         linha.append($('<td>').html(`
             <a href="contato/views/tela_editar_contato.php?id=${contato.id}" class="btn btn-warning btn-sm">Editar</a>
             <button type="button" class="btn btn-danger btn-sm btn-excluir" data-toggle="modal" data-target="#modalAlertaExcluir" data-contato-id="${contato.id}">
@@ -163,6 +163,18 @@ function atualizarTabela(contatos) {
         `));
         tabela.append(linha);
     });
+}
+
+function formatarData(dataString) {
+    return moment(dataString).format('DD-MM-YYYY');
+}
+
+function adicionarMascaraTelefone(telefone) {
+    if (!telefone) return ""
+    telefone = telefone.replace(/\D/g, '')
+    telefone = telefone.replace(/(\d{2})(\d)/, "($1) $2")
+    telefone = telefone.replace(/(\d)(\d{4})$/, "$1-$2")
+    return telefone
 }
 
 
